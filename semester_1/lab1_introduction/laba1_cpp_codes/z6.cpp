@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 /*
 Вычислить сумму первых n нечётных чисел.
 Количество чисел n вводится с клавиатуры.
@@ -9,13 +7,18 @@ using namespace std;
 
 int main()
 {
+    using std::cin;
+    using std::cout;
     int n, sum = 0;
-    cin >> n;
-
-    for (int i = 1; i <= n; i+=2)
+    cout << "enter the n: ";
+    if(!(cin >> n) || n < 1) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
+    for (int i = 1; i <= n; i += 2)
         sum += i;
 
-    cout << sum;
+    cout << "sum is " << sum;
 
     return 0;
 }

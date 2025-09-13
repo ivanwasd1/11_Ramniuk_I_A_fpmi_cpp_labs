@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 /*
 Для чисел от 1 до n посчитать следующую сумму: s = 11 + 22 +. . .+n^n.
 После реализации рассчитать s для маленьких n(n = 5, 6, 10). Затем
@@ -36,14 +34,11 @@ void sum_of_pow (int n) {
     for (int i = 1; i <= n; i++)
         sum += powwww(i, i);
 
-    cout << "n = " << n << ": sum = " << sum << '\n';
-
-
+    std::cout << "n = " << n << ": sum = " << sum << '\n';
 }
 
 int main()
 {
-
     sum_of_pow(1);
     sum_of_pow(6);
     sum_of_pow(10);
@@ -52,7 +47,6 @@ int main()
     sum_of_pow(200);
     sum_of_pow(500);
     sum_of_pow(1000);
-
 
     return 0;
 }

@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 /*
 Написать программу, которая вычисляет среднее
 арифметическое последовательности дробных чисел,
@@ -13,16 +11,29 @@ using namespace std;
 
 int main()
 {
-    int n;
-    cin >> n;
+    using std::cin;
+    using std::cout;
 
+    int n;
+    cout << "enter the n: ";
+    if(!(cin >> n) || n < 1) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
+    cout << "enter numbers: ";
     double t;
-    cin >> t;
+    if(!(cin >> t)) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
     double mn = t, mx = t, sum = t;
 
     for (int i = 1; i < n; i++) {
 
-        cin >> t;
+        if(!(cin >> t)) {
+            cout << "ERROR!!!";
+            std::exit(1);
+        }
 
         sum += t;
         if (t > mx)
@@ -31,5 +42,9 @@ int main()
             mn = t;
     }
     double av = sum / n;
-    cout << av << ' ' << mn << ' ' << mx;
+    cout << "average number is " << av << '\n';
+    cout << "min number is " << mn << '\n';
+    cout << "max number is " << mx << '\n';
+
+    return 0;
 }

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
-
 /*
 Даны два натуральных числа n и m(вводятся с клавиатуры). Вывести
 все их общие делители
@@ -23,8 +21,19 @@ int my_gcd(int a, int b) {
 
 int main()
 {
+    using std::cin;
+    using std::cout;
+
     int n, m;
-    cin >> n >> m;
+    cout << "enter n and m: ";
+    if(!(cin >> n >> m)) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    } else if (n < 1 || m < 1) {
+        cout << "n or(and) m are not natural number";
+        std::exit(1);
+    }
+
     int gcd = my_gcd(n, m);
 
     cout << "common divisors of numbers " << n << " and " << m << ":\n";

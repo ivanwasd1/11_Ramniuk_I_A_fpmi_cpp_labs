@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 /*
 Вычислите сумму цифр целого неотрицательного числа.
 Число вводится с клавиатуры.
@@ -9,15 +7,21 @@ using namespace std;
 
 int main()
 {
+    using std::cin;
+    using std::cout;
+
     int n, s = 0;
-    cin >> n;
+    cout << "enter the n: ";
+    if(!(cin >> n) || n < 1) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
 
     while (n) {
         s += n % 10;
         n /= 10;
     }
-
-    cout << s;
+    cout << "sum of digits is " << s;
 
 
     return 0;

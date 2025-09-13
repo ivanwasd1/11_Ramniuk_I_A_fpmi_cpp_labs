@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 /*
 Написать программу, которая определяет, является ли шестизначное
 число «счастливым» (т.е. сумма первых трёх цифр равняется сумме
@@ -10,8 +8,15 @@ using namespace std;
 
 int main()
 {
+    using std::cin;
+    using std::cout;
+
     int n;
-    cin >> n;
+    cout << "enter a six-digit number: ";
+    if(!(cin >> n)) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
 
     int a1 = n / 100000;
     int a2 = n / 10000 % 10;
@@ -24,4 +29,6 @@ int main()
         cout << n << " is happy";
     else
         cout << n << " is not happy";
+
+    return 0;
 }

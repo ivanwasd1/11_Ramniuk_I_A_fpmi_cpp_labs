@@ -16,12 +16,17 @@
 идущим переводом строки. Ответ должен выглядеть примерно так:
 */
 
-using namespace std;
-
 int main()
 {
+    using std::cin;
+    using std::cout;
+
     int n, k;
-    cin >> n >> k;
+    cout << "enter num of week and num of month: ";
+    if(!(cin >> n >> k) || n < 1 || n > 7 || n > k || k < 1 || k > 99) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
 
     int cnt_w = (k - 7 - n + 1) / 7 + bool((k - 7 - n + 1) % 7);
 
@@ -50,4 +55,6 @@ int main()
         }
         cout << '\n';
     }
+
+    return 0;
 }

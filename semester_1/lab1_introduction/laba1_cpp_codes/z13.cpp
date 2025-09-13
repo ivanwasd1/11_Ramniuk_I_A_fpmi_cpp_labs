@@ -7,12 +7,17 @@
 Fn = Fn−1 + Fn−2, где F0 = 0, F1 = 1.
 */
 
-using namespace std;
-
 int main()
 {
+    using std::cin;
+    using std::cout;
+
     int n;
-    cin >> n;
+    cout << "enter the n: ";
+    if(!(cin >> n) || n < 1) {
+        cout << "ERROR!!!";
+        std::exit(1);
+    }
     int a = 0, b = 1;
     cout << a << ' ' << b << ' ';
     for (int i = 0; i < n - 2; i++) {
