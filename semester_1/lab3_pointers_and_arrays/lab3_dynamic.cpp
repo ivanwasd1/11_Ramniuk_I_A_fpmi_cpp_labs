@@ -8,7 +8,7 @@ int main() {
     using std::cin;
     using std::cout;
 
-    cout << "enter 0 if you want that array consists of random numbers([1, 100])\nelse enter 1 to get array consists of entered numbers\n";
+    cout << "enter 0 if you want that array consists of random numbers\nelse enter 1 to get array consists of entered numbers\n";
     bool flag;
     if (!(cin >> flag)) {
         cout << "ERROR!!!";
