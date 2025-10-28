@@ -3,8 +3,98 @@
 
 const int MAX_SIZE_ARR = 50002;
 
-int main() {
+void read_arr(int* arr, int n) {
+    std::cout << "enter n elements of array (elements must be from 1 to 100000):\n";
 
+    if (!(std::cin >> arr[0]) || arr[0] < 1 || arr[0] > MAX_SIZE_ARR - 2) {
+        std::cout << "ERROR!!!";
+        std::exit(1);
+    }
+
+    for (int i = 1; i < n; i++) {
+        if (!(std::cin >> arr[i]) || arr[i] < 1 || arr[i] > MAX_SIZE_ARR - 2) {
+            std::cout << "ERROR!!!";
+            std::exit(1);
+        }
+    }
+}
+
+void fill_rand(int* arr, int n) {
+    std::cout << "enter the right border of your random numbers: ";
+    int right_border;
+    if (!(std::cin >> right_border) || right_border < 1 || right_border > MAX_SIZE_ARR - 2) {
+        std::cout << "ERROR!!!";
+        std::exit(1);
+    }
+
+    std::mt19937 gen(345798);
+    std::uniform_int_distribution<int> dist(1, right_border);
+
+    for (int i = 0; i < n; i++)
+        arr[i] = dist(gen);
+
+    std::cout << "elements of an array filled with random numbers from 1 to " << right_border << " :\n";
+
+    for (int i = 0; i < n; i++)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
+void find_max_elements(int* arr, int n) {
+    int mx = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > mx)
+            mx = arr[i];
+
+    std::cout << "the numbers of all maximum elements of the array:\n";
+    for (int i = 0; i < n; i++)
+        if (arr[i] == mx)
+            std::cout << i + 1 << ' ';
+    std::cout << "\n\n";
+}
+
+int find_min_missing_number(int* arr, int n) {
+    for (int i = 0; i < n; i++) {
+        int val = abs(arr[i]);
+        if (val <= n && val > 0) {
+            arr[val - 1] = -abs(arr[val - 1]);
+        }
+    }
+
+    int min_number = n + 1;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] > 0) {
+            min_number = i + 1;
+            break;
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] = abs(arr[i]);
+
+    std::cout << "the minimum number that is not in the array is " << min_number << "\n\n";
+    return min_number;
+}
+
+void transform_array(int* arr, int n, int k) {
+    int j = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] > k) {
+            for (int m = i; m > j; m--) {
+                std::swap(arr[m], arr[m - 1]);
+            }
+            j++;
+        }
+    }
+}
+
+void print_array(int* arr, int n) {
+    for (int i = 0; i < n; i++)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
+int main() {
     using std::cin;
     using std::cout;
 
@@ -22,87 +112,15 @@ int main() {
         std::exit(1);
     }
 
-
-
     int arr[MAX_SIZE_ARR];
 
-    if (flag) {
+    if (flag)
+        read_arr(arr, n);
+    else
+        fill_rand(arr, n);
 
-        cout << "enter n elements of array (elements must be from 1 to 100000):\n";
-
-        if (!(cin >> arr[0]) || arr[0] < 1 || arr[0] > MAX_SIZE_ARR - 2) {
-            cout << "ERROR!!!";
-            std::exit(1);
-        }
-
-        int mx = arr[0];
-
-        for (int i = 1; i < n; i++) {
-
-            if (!(cin >> arr[i]) || arr[i] < 1 || arr[i] > MAX_SIZE_ARR - 2) {
-                cout << "ERROR!!!";
-                std::exit(1);
-            }
-            if (arr[i] > mx)
-                mx = arr[i];
-
-        }
-        cout << "the numbers of all maximum elements of the array:\n";
-        for (int i = 0; i < n; i++)
-            if (arr[i] == mx)
-                cout << i + 1 << ' ';
-
-        cout << '\n';
-    }
-    else {
-
-        cout << "enter the right border of your random numbers: ";
-        int right_border;
-        if (!(cin >> right_border) || right_border < 1 || right_border > MAX_SIZE_ARR - 2) {
-            cout << "ERROR!!!";
-            std::exit(1);
-        }
-
-        std::mt19937 gen(345798);
-        std::uniform_int_distribution<int> dist(1, right_border);
-
-        for (int i = 0; i < n; i++)
-            arr[i] = dist(gen);
-
-        cout << "elements of an array filled with random numbers from 1 to " << right_border << " :\n";
-
-        for (int i = 0; i < n; i++)
-            cout << arr[i] << ' ';
-
-        cout << '\n';
-
-        int mx = arr[0];
-        for (int i = 1; i < n; i++)
-            if (arr[i] > mx)
-                mx = arr[i];
-
-        cout << "the numbers of all maximum elements of the array:\n";
-        for (int i = 0; i < n; i++)
-            if (arr[i] == mx)
-                cout << i + 1 << ' ';
-
-
-    }
-    cout << "\n\n";
-
-    int min_number_insnt_in_arr = 0;
-    for (int i = 0; i < n; i++)
-        arr[arr[i] - 1] *= -1;
-    for (int i = 0; i < n + 1; i++)
-        if (arr[i] > 0) {
-            min_number_insnt_in_arr = i + 1;
-            break;
-        }
-
-    for (int i = 0; i < n; i++)
-        arr[i] = abs(arr[i]);
-
-    cout << "the minimum number that is not in the array is " << min_number_insnt_in_arr << "\n\n";
+    find_max_elements(arr, n);
+    find_min_missing_number(arr, n);
 
     cout << "enter the number that will be used to convert the array: ";
     int k;
@@ -111,27 +129,10 @@ int main() {
         std::exit(1);
     }
 
-    int j = n;
-
-    for (int i = 0; i < n; i++)
-        if (arr[i] > k)
-            arr[j++] = arr[i];
-
-    for (int i = 0; i < n; i++)
-        if (arr[i] <= k)
-            arr[j++] = arr[i];
-
-    for (int i = 0; i < n; i++)
-        arr[i] = arr[i + n], arr[i + n] = 0;
-
+    transform_array(arr, n, k);
 
     cout << "Your new array:\n";
-
-
-
-    for (int i = 0; i < n; i++)
-        cout << arr[i] << ' ';
-
+    print_array(arr, n);
 
     return 0;
 }
