@@ -3,8 +3,109 @@
 
 const int MAX_SIZE_ARR = 100000;
 
-int main() {
+void read_arr(double* arr, int sizeArr) {
+    std::cout << "enter n elements of array (elements must be from 1 to 100000):\n";
 
+    for (int i = 0; i < sizeArr; i++)
+        if (!(std::cin >> arr[i])) {
+            std::cout << "ERROR!!!";
+            delete[] arr;
+            std::exit(1);
+        }
+}
+
+void fill_rand(double* arr, int sizeArr) {
+    std::cout << "enter right and left border of your random numbers: ";
+    double right_border, left_border;
+    if (!(std::cin >> left_border) || !(std::cin >> right_border)) {
+        std::cout << "ERROR!!!";
+        delete[] arr;
+        std::exit(1);
+    }
+
+    if (left_border > right_border)
+        std::swap(left_border, right_border);
+
+    std::mt19937 gen(345798);
+    std::uniform_real_distribution<double> dist(left_border, right_border);
+
+    for (int i = 0; i < sizeArr; i++)
+        arr[i] = dist(gen);
+
+    std::cout << "elements of an array filled with random numbers from " << left_border << "to " << right_border << " :\n";
+
+    for (int i = 0; i < sizeArr; i++)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
+void segment_max_sum(double* arr, int sizeArr) {
+    int now_left = 0, now_right = 0, best_left = 0, best_right = 0;
+    double now_sum = arr[0], best_sum = arr[0];
+
+    for (int i = 1; i < sizeArr; i++) {
+        if (now_sum > 0) {
+            now_sum += arr[i];
+            now_right = i;
+        } else {
+            now_sum = arr[i];
+            now_left = i, now_right = i;
+        }
+        if (now_sum > best_sum) {
+            best_sum = now_sum;
+            best_left = now_left;
+            best_right = now_right;
+        }
+    }
+    std::cout << "the chain of elements having the largest sum:\n";
+    for (int i = best_left; i <= best_right; i++)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
+double sum_after_last_zero(double* arr, int sizeArr) {
+    double sum = 0;
+    bool found_zero = false;
+
+    for (int i = sizeArr - 1; i >= 0; i--) {
+        if (arr[i] == 0) {
+            found_zero = true;
+            break;
+        }
+        sum += arr[i];
+    }
+
+    if (!found_zero) {
+        std::cout << "there is not element zero\n";
+        return 0;
+    }
+
+    std::cout << "the sum of the array elements located after the last element is zero:  ";
+    std::cout << sum << '\n';
+    return sum;
+}
+
+void transform_array(double* arr, int sizeArr) {
+    int j = 0;
+
+    for (int i = 0; i < sizeArr; i++)
+        if (int(arr[i]) <= 1) {
+            if (i != j) {
+                std::swap(arr[i], arr[j]);
+            }
+            j++;
+        }
+    
+}
+
+void print_array(double* arr, int sizeArr) {
+    for (int i = 0; i < sizeArr; i++)
+        std::cout << arr[i] << ' ';
+    std::cout << '\n';
+}
+
+int main() {
+    
     using std::cin;
     using std::cout;
 
@@ -16,122 +117,27 @@ int main() {
     }
 
     cout << "enter the size of array (size must be from 1 to 100000) n: ";
-    int n;
-    if (!(cin >> n) || n < 1 || n > MAX_SIZE_ARR) {
+    int sizeArr;
+    if (!(cin >> sizeArr) || sizeArr < 1 || sizeArr > MAX_SIZE_ARR) {
         cout << "ERROR!!!";
         std::exit(1);
     }
 
-    double* arr = new double[n];
+    double* arr = new double[sizeArr];
 
-    if (flag) {
-
-        cout << "enter n elements of array (elements must be from 1 to 100000):\n";
-
-        for (int i = 0; i < n; i++)
-            if (!(cin >> arr[i])) {
-                cout << "ERROR!!!";
-                delete[] arr;
-                std::exit(1);
-            }
-    }
-    else {
-
-        cout << "enter right and left border of your random numbers: ";
-        double right_border, left_border;
-        if (!(cin >> left_border) || !(cin >> right_border)) {
-            cout << "ERROR!!!";
-            delete[] arr;
-            std::exit(1);
-        }
-
-        if (left_border > right_border)
-            std::swap(left_border, right_border);
-
-        std::mt19937 gen(345798);
-        std::uniform_real_distribution<double> dist(left_border, right_border);
-
-        for (int i = 0; i < n; i++)
-            arr[i] = dist(gen);
-
-        cout << "elements of an array filled with random numbers from " <<  left_border << "to " << right_border << " :\n";
-
-        for (int i = 0; i < n; i++)
-            cout << arr[i] << ' ';
-        cout << '\n';
-    }
-
-    int now_left = 0, now_right = 0, best_left = 0, best_right = 0;
-    double now_sum = arr[0], best_sum = arr[0];
-
-    for (int i = 1; i < n; i++) {
-
-        if (now_sum > 0) {
-            now_sum += arr[i];
-            now_right = i;
-        }
-        else {
-            now_sum = arr[i];
-            now_left = i, now_right = i;
-        }
-
-        if (now_sum > best_sum) {
-            best_sum = now_sum;
-            best_left = now_left;
-            best_right = now_right;
-        }
-
-    }
-
-    cout << "the chain of elements having the largest sum:\n";
-    for (int i = best_left; i <= best_right; i++)
-        cout << arr[i] << ' ';
-    cout << '\n';
-
-    double sum_after_zero = 0;
-
-    bool flag_of_zero = 0;
-    for (int i = n - 1; i >= 0; i--) {
-        if (arr[i] == 0)
-            flag_of_zero = 1;
-        sum_after_zero += arr[i];
-    }
-
-    if (flag_of_zero) {
-        cout << "the sum of the array elements located after the last element is zero:  ";
-        cout << sum_after_zero << '\n';
-    }
+    if (flag)
+        read_arr(arr, sizeArr);
     else
-        cout << "there is not element zero\n";
+        fill_rand(arr, sizeArr);
 
-    double* temp = new double[n];
-    int j = 0;
-
-    for (int i = 0; i < n; i++) {
-        if (int(arr[i]) <= 1) {
-            temp[j++] = arr[i];
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        if (int(arr[i]) > 1) {
-            temp[j++] = arr[i];
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        arr[i] = temp[i];
-    }
-
-    delete[] temp;
+    segment_max_sum(arr, sizeArr);
+    sum_after_last_zero(arr, sizeArr);
+    transform_array(arr, sizeArr);
 
     cout << "Your new array:\n";
-    for (int i = 0; i < n; i++)
-        cout << arr[i] << ' ';
-    cout << '\n';
+    print_array(arr, sizeArr);
 
     delete[] arr;
 
     return 0;
 }
-
