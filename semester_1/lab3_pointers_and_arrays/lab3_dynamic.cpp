@@ -63,6 +63,11 @@ void segment_max_sum(double* arr, int sizeArr) {
 }
 
 double sum_after_last_zero(double* arr, int sizeArr) {
+    
+    if (arr[sizeArr - 1] == 0) {
+        cout << "Last element is zero so we can't solve sum\n";
+    }
+    
     double sum = 0;
     bool found_zero = false;
 
