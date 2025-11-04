@@ -13,14 +13,14 @@ void read_arr(int* arr, int sizeArr) {
     }
 
     for (int i = 1; i < sizeArr; i++) {
-        if (!(std::cin >> arr[i]) || arr[i] < 1 || arr[i] > sizeArr) {
+        if (!(std::cin >> arr[i]) || arr[i] < 1 || arr[i] > MAX_SIZE_ARR) {
             std::cout << "ERROR!!!";
             std::exit(1);
         }
     }
 }
 
-void fill_rand(int* arr, int sizeArr) {
+void fill_rand(int* arr, int sizeArr, std::mt19937& gener) {
 
     std::cout << "enter the right border of your random numbers(sizeArr or less then your sizeArr): ";
     int right_border;
@@ -28,12 +28,9 @@ void fill_rand(int* arr, int sizeArr) {
         std::cout << "ERROR!!!";
         std::exit(1);
     }
-
-    std::mt19937 gen(345798);
-    std::uniform_int_distribution<int> dist(1, std::min(right_border, sizeArr));
-
+    std::uniform_int_distribution<int> dist(1, right_border);
     for (int i = 0; i < sizeArr; i++)
-        arr[i] = dist(gen);
+        arr[i] = dist(gener);
 
     std::cout << "elements of an array filled with random numbers from 1 to " << right_border << " :\n";
 
@@ -57,19 +54,23 @@ void find_max_elements(int* arr, int sizeArr) {
 
 void find_min_missing_number(int* arr, int sizeArr) {
 
-    for (int i = 0; i < sizeArr; i++)
-        if (arr[abs(arr[i]) - 1] > 0)
-            arr[abs(arr[i]) - 1] *= -1;
+    int min_number = 1;
 
-    int min_number = sizeArr + 1;
-    for (int i = 0; i <= sizeArr; i++)
-        if (arr[i] > 0) {
-            min_number = i + 1;
-            break;
+    for (int i = 1; i <= sizeArr + 1; i++) {
+        bool found = false;
+
+        for (int j = 0; j < sizeArr; j++) {
+            if (arr[j] == i) {
+                found = true;
+                break;
+            }
         }
 
-    for (int i = 0; i < sizeArr; i++)
-        arr[i] = abs(arr[i]);
+        if (!found) {
+            min_number = i;
+            break;
+        }
+    }
 
     std::cout << "the minimum number that is not in the array is " << min_number << "\n\n";
 }
@@ -82,11 +83,11 @@ void transform_array(int* arr, int sizeArr) {
         std::cout << "ERROR!!!";
         std::exit(1);
     }
-    int j = 0;
+
     for (int i = 0; i < sizeArr; i++) {
-        if (arr[i] > k) {
-            std::swap(arr[i], arr[j]);
-            j++;
+        if (arr[i] > k)
+        for (int j = i; j >= 1 && arr[j - 1] < k; j--) {
+            std::swap(arr[j], arr[j - 1]);
         }
     }
 }
@@ -122,8 +123,10 @@ int main() {
 
     if (flag)
         read_arr(arr, sizeArr);
-    else
-        fill_rand(arr, sizeArr);
+    else {
+        std::mt19937 gen(345798);
+        fill_rand(arr, sizeArr, gen);
+    }
 
     find_max_elements(arr, sizeArr);
 
