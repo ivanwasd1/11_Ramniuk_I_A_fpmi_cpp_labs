@@ -14,7 +14,7 @@ void read_arr(double* arr, int sizeArr) {
         }
 }
 
-void fill_rand(double* arr, int sizeArr) {
+void fill_rand(double* arr, int sizeArr, std::mt19937& gen) {
     std::cout << "enter right and left border of your random numbers: ";
     double right_border, left_border;
     if (!(std::cin >> left_border) || !(std::cin >> right_border)) {
@@ -26,7 +26,6 @@ void fill_rand(double* arr, int sizeArr) {
     if (left_border > right_border)
         std::swap(left_border, right_border);
 
-    std::mt19937 gen(345798);
     std::uniform_real_distribution<double> dist(left_border, right_border);
 
     for (int i = 0; i < sizeArr; i++)
@@ -86,16 +85,15 @@ double sum_after_last_zero(double* arr, int sizeArr) {
 }
 
 void transform_array(double* arr, int sizeArr) {
-    int j = 0;
 
-    for (int i = 0; i < sizeArr; i++)
+    for (int i = 0; i < sizeArr; i++) {
         if (int(arr[i]) <= 1) {
-            if (i != j) {
-                std::swap(arr[i], arr[j]);
+            for (int j = i; j > 0 && int(arr[j - 1]) > 1; j--) {
+                std::swap(arr[j], arr[j - 1]);
             }
-            j++;
         }
-    
+    }
+
 }
 
 void print_array(double* arr, int sizeArr) {
@@ -105,7 +103,7 @@ void print_array(double* arr, int sizeArr) {
 }
 
 int main() {
-    
+
     using std::cin;
     using std::cout;
 
@@ -127,8 +125,10 @@ int main() {
 
     if (flag)
         read_arr(arr, sizeArr);
-    else
-        fill_rand(arr, sizeArr);
+    else {
+        std::mt19937 gen(345798);
+        fill_rand(arr, sizeArr, gen);
+    }
 
     segment_max_sum(arr, sizeArr);
     sum_after_last_zero(arr, sizeArr);
