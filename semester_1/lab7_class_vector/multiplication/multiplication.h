@@ -3,5 +3,5 @@
 #include <exception>
 
 int64_t Multiply(int32_t a, int32_t b) {
-    throw std::runtime_error("Not implemented :(");
+    return std::static_cost<int64_t>(a)*std::static_cost<int64_t>(b);
 }
