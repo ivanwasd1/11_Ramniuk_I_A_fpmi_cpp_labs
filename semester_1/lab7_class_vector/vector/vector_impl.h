@@ -9,8 +9,8 @@ class Vector {
 
     private:
         int* arr;
-        int arrSize;
-        int capacity;
+        size_t capacity;
+        size_t arrSize;
         void isOutRange(size_t idx) const;
         void Reallocate(size_t newCapacity);
     public:

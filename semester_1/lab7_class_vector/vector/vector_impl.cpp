@@ -15,7 +15,7 @@ void Vector::Reallocate(size_t newCapacity) {
     arr = newArr;
 }
 
-Vector::Vector() noexcept : capacity(0), arrSize(0), arr(nullptr) {}
+Vector::Vector() noexcept : arr(nullptr), capacity(0), arrSize(0) {}
 
 Vector::Vector(size_t n) : arr(nullptr), capacity(n), arrSize(n) {
     if (n) {
@@ -26,7 +26,7 @@ Vector::Vector(size_t n) : arr(nullptr), capacity(n), arrSize(n) {
 }
 
 Vector::Vector(std::initializer_list<int> listik) 
-    : capacity(listik.size()), arrSize(listik.size()), arr(nullptr) {
+    : arr(nullptr), capacity(listik.size()), arrSize(listik.size()) {
     if (capacity != 0) {
         arr = new int[capacity];
         size_t idx = 0;
@@ -57,7 +57,7 @@ Vector::~Vector(){
     arrSize = 0;
 }
 
-void Vector::Swap(Vector& other) {
+void Vector::Swap(Vector& other) noexcept {
     std::swap(other.arr, arr);
     std::swap(other.capacity, capacity);
     std::swap(other.arrSize, arrSize);
@@ -100,14 +100,14 @@ void Vector::PushBack(int newNum) {
 }
 
 void Vector::PopBack () noexcept {
-    arrSize = std::max(0, arrSize - 1);
+    arrSize = std::max(static_cast<size_t>(0), arrSize - 1);
 }
 
 void Vector::Clear () noexcept {
     arrSize = 0;
 }
 
-void Vector::Reserve (size_t newCapacity) noexcept {
+void Vector::Reserve (size_t newCapacity) {
     if (arrSize < newCapacity) {
         Reallocate(newCapacity);
     }

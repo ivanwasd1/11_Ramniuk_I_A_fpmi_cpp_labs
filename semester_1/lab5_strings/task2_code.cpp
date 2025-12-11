@@ -1,78 +1,83 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
 
-int CountOfUppers(std::string str) {
-
+int CountUpper(const std::string& str) {
     int count = 0;
-    for (char c : str)
-        if (c >= 'A' && c <= 'Z')
-            count++;
-
+    for (unsigned char ch : str) {
+        if (std::isupper(ch)) {
+            ++count;
+        }
+    }
     return count;
 }
 
-bool comp(std::string x, std::string y) {
-
-    if (CountOfUppers(x) < CountOfUppers(y))
-        return 1;
-    else if (CountOfUppers(x) == CountOfUppers(y) && x < y)
-        return 1;
-    else
-        return 0;
-
+void  ChangeRegistr(std::string& str) {
+    for (char& ch : str) {
+        if (std::islower(ch)) {
+            ch = std::toupper(ch);
+        } else if (std::isupper(ch)) {
+            ch = std::tolower(ch);
+        }
+    }
 }
 
-int main()
-{
+std::vector<std::string> toWords(const std::string& str) {
+    std::vector<std::string> words;
+    std::string temp;
+
+    for (unsigned char ch : str) {
+        if (ch == ' ') {
+            if (!temp.empty()) {
+                words.push_back(temp);
+                temp.clear();
+            }
+        } else {
+            temp.push_back(static_cast<char>(ch));
+        }
+    }
+
+    if (!temp.empty()) {
+        words.push_back(temp);
+    }
+
+    return words;
+}
+
+int main() {
+
+    using std::string;
+    using std::vector;
     using std::cout;
     using std::cin;
-    using std::vector;
-    using std::string;
 
-    string str;
-    getline(cin, str);
+    string line;
+    std::getline(cin, line);
 
-    int size_of_str = str.size();
+    ChangeRegistr(line);
 
-    for (int i = 0; i < size_of_str; i++)
-        if (str[i] >= 'a' && str[i] <= 'z')
-            str[i] -= 32;
-        else if (str[i] >= 'A' && str[i] <= 'Z')
-            str[i] += 32;
+    cout << "\nREPLACED! (changing upper case to lower case and vice versa)\n\n";
+    cout << line << '\n';
 
-    cout << "\nREPLACED!(changing upper case to lower case and vice versa)\n\n";
-    cout << str << '\n';
+    vector<string> words = toWords(line);
 
-    vector<string> words;
-    str += ' ';
+    std::sort(words.begin(), words.end(),
+              [](const string& a, const string& b) {
+                  int ca = CountUpper(a);
+                  int cb = CountUpper(b);
+                  if (ca != cb) {
+                      return ca < cb;
+                  }
+                  return a < b;
+              });
 
-    while (str != "") {
-
-        string temp_str = str.substr(0, str.find(' '));
-        words.push_back(temp_str);
-
-        int cnt_of_space = 0;
-        while (str[str.find(' ') + 1 + cnt_of_space] == ' ')
-            cnt_of_space++;
-
-        str.erase(0, str.find(' ') + 1 + cnt_of_space);
-
+    cout << "\nREPLACED! (sorting by the counts of uppercase letters)\n\n";
+    for (const auto& w : words) {
+        cout << w << ' ';
     }
-    int size_of_words = words.size();
-
-    for (int i = 0; i < size_of_words; i++) {
-        int best_idx = i;
-        for (int j = i + 1; j < size_of_words; j++)
-            if (comp(words[j], words[best_idx]))
-                best_idx = j;
-        swap(words[i], words[best_idx]);
-    }
-
-    cout << "\nREPLACED!(sorting by the counts of uppercase letters)\n\n";
-
-    for (int i = 0; i < size_of_words; i++)
-        cout << words[i] << ' ';
+    cout << '\n';
 
     return 0;
 }
