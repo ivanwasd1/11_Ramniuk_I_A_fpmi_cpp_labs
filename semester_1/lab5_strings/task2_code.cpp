@@ -2,48 +2,64 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <cctype>
+#include <windows.h>
 
-int CountUpper(const std::string& str) {
-    int count = 0;
-    for (unsigned char ch : str) {
-        if (std::isupper(ch)) {
-            ++count;
-        }
-    }
-    return count;
+bool isLetter(const char c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+        || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я');
 }
 
-void  ChangeRegistr(std::string& str) {
-    for (char& ch : str) {
-        if (std::islower(ch)) {
-            ch = std::toupper(ch);
-        } else if (std::isupper(ch)) {
-            ch = std::tolower(ch);
+int CountUpper(const std::string& str) {
+    int cnt = 0;
+    for (char ch : str) {
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'А' && ch <= 'Я')) {
+            cnt++;
         }
+    }
+    return cnt;
+}
+
+void ChangeRegistr(std::string& str) {
+
+    for (char& c : str) {
+        if (c >= 'a' && c <= 'z')
+            c = c - 'a' + 'A';
+        else if (c >= 'A' && c <= 'Z')
+            c = c - 'A' + 'a';
+        if (c >= 'а' && c <= 'я')
+            c = c - 'а' + 'А';
+        else if (c >= 'А' && c <= 'Я')
+            c = c - 'А' + 'а';
+
     }
 }
 
 std::vector<std::string> toWords(const std::string& str) {
+
     std::vector<std::string> words;
     std::string temp;
-
-    for (unsigned char ch : str) {
-        if (ch == ' ') {
+    for (char ch : str) {
+        if (isLetter(ch))
+            temp.push_back(ch);
+        else {
             if (!temp.empty()) {
                 words.push_back(temp);
                 temp.clear();
             }
-        } else {
-            temp.push_back(static_cast<char>(ch));
         }
     }
-
-    if (!temp.empty()) {
+    if (!temp.empty())
         words.push_back(temp);
-    }
 
     return words;
+}
+
+bool compWords(const std::string& a, const std::string& b) {
+    int cnt_a = CountUpper(a);
+    int cnt_b = CountUpper(b);
+    if (cnt_a != cnt_b)
+        return cnt_a < cnt_b;
+    return a < b;
 }
 
 int main() {
@@ -52,6 +68,10 @@ int main() {
     using std::vector;
     using std::cout;
     using std::cin;
+
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
 
     string line;
     std::getline(cin, line);
@@ -63,20 +83,12 @@ int main() {
 
     vector<string> words = toWords(line);
 
-    std::sort(words.begin(), words.end(),
-              [](const string& a, const string& b) {
-                  int ca = CountUpper(a);
-                  int cb = CountUpper(b);
-                  if (ca != cb) {
-                      return ca < cb;
-                  }
-                  return a < b;
-              });
+    std::sort(words.begin(), words.end(), compWords);
 
     cout << "\nREPLACED! (sorting by the counts of uppercase letters)\n\n";
-    for (const auto& w : words) {
+    for (const auto& w : words)
         cout << w << ' ';
-    }
+
     cout << '\n';
 
     return 0;
