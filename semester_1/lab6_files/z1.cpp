@@ -9,58 +9,54 @@ struct word {
     std::string s;
 };
 
-word mostCounter(const std::string *arr, int n) {
-
+word mostCounter(const std::string* arr, int n) {
     if (n <= 0)
-        throw "Empty array in mostCounter";
+        throw "File contains no words";
 
     word best{0, arr[0]};
+
     for (int i = 0; i < n; i++) {
         word now{0, arr[i]};
+
         for (int j = 0; j < n; j++) {
             if (arr[j] == now.s)
                 now.cnt++;
         }
+
         if (best.cnt < now.cnt)
             best = now;
     }
-    return best;
 
+    return best;
 }
 
 int main() {
-
-
     try {
-
         std::ifstream in("input.txt");
-
         if (!in.is_open())
-            throw "We can't open file!!!";
-        else if (in.peek() == EOF)
-            throw "file is empty!!!";
+            throw "We can't open file";
 
-        std::string *arrStr = new std::string[MAX_SIZE];
+        std::string arrStr[MAX_SIZE];
         int arrSize = 0;
+
         std::string temp;
-        while (in >> temp){
+        while (in >> temp) {
             if (arrSize >= MAX_SIZE)
-                throw "Too many words in file!!!";
+                throw "Too many words in file";
             arrStr[arrSize++] = temp;
         }
 
-        word counter = mostCounter(arrStr, arrSize);
-        std::cout << "the most common word is " << counter.s << '\n';
-        std::cout << "It appeared " << counter.cnt << " times in the text\n";
+        if (arrSize == 0)
+            throw "File contains no words";
 
-        delete[] arrStr;
+        word counter = mostCounter(arrStr, arrSize);
+
+        std::cout << "Most common word: " << counter.s << '\n';
+        std::cout << "Count: " << counter.cnt << '\n';
     }
-    catch (const char* error)
-    {
+    catch (const char* error) {
         std::cout << "error - " << error << '\n';
     }
-    std::cout << "Program is finished";
 
     return 0;
-
 }
