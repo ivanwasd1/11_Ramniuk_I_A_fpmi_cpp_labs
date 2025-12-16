@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
-#include <exception>
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
+#include <stdexcept>
+#include <utility>
 
 class Vector {
 

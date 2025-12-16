@@ -2,7 +2,7 @@
 
 void Vector::isOutRange(size_t idx) const {
     if (idx >= arrSize)
-        throw std::out_of_range("You can't emae take idx which more big than your size tupen");
+        throw std::out_of_range("You can't emae take idx which more big than your size");
 }
 
 void Vector::Reallocate(size_t newCapacity) {
@@ -99,16 +99,17 @@ void Vector::PushBack(int newNum) {
     arrSize++;
 }
 
-void Vector::PopBack () noexcept {
-    arrSize = std::max(static_cast<size_t>(0), arrSize - 1);
+void Vector::PopBack() noexcept {
+    if (arrSize > 0)
+        --arrSize;
 }
 
 void Vector::Clear () noexcept {
     arrSize = 0;
 }
 
-void Vector::Reserve (size_t newCapacity) {
-    if (arrSize < newCapacity) {
+void Vector::Reserve(size_t newCapacity) {
+    if (newCapacity > capacity) {
         Reallocate(newCapacity);
     }
 }
