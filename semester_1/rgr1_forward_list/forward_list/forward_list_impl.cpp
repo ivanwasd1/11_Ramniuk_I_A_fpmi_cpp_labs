@@ -37,14 +37,17 @@ void ForwardList::Clear() {
 }
 
 int32_t ForwardList::Front() const {
-    if (!head_) throw std::out_of_range("Front on empty list");
+    if (!head_) 
+        throw std::out_of_range("list is emtry");
     return head_->value_;
 }
 
 bool ForwardList::FindByValue(int32_t value) const {
-    for (Node* cur = head_; cur; cur = cur->next_) {
-        if (cur->value_ == value) return true;
-    }
+
+    for (Node* cur = head_; cur; cur = cur->next_) 
+        if (cur -> value_ == value) 
+            return true;
+    
     return false;
 }
 
@@ -61,7 +64,7 @@ void ForwardList::Print(std::ostream& out) const {
 
 ForwardList::ForwardList(size_t count, int32_t value) : head_(nullptr), size_(0) {
     Node* tail = nullptr;
-    for (size_t i = 0; i < count; ++i) {
+    for (size_t i = 0; i < count; i++) {
         Node* n = new Node(value);
         if (!head_) {
             head_ = n;
@@ -75,14 +78,16 @@ ForwardList::ForwardList(size_t count, int32_t value) : head_(nullptr), size_(0)
 }
 
 ForwardList::ForwardList(const ForwardList& rhs) : head_(nullptr), size_(0) {
-    if (!rhs.head_) return;
 
-    head_ = new Node(rhs.head_->value_);
+    if (!rhs.head_) 
+        return;
+
+    head_ = new Node(rhs.head_ -> value_);
     Node* tail = head_;
     ++size_;
 
     for (Node* cur = rhs.head_->next_; cur; cur = cur->next_) {
-        tail->next_ = new Node(cur->value_);
+        tail->next_ = new Node(cur -> value_);
         tail = tail->next_;
         ++size_;
     }
@@ -95,9 +100,11 @@ ForwardList::ForwardList(std::initializer_list<int32_t> init) : ForwardList() {
     }
 }
 
-ForwardList& ForwardList::operator=(const ForwardList& rhs) {
-    if (this == &rhs) return *this;
-    ForwardList tmp(rhs);
+ForwardList& ForwardList::operator=(const ForwardList& neww) {
+
+    if (this == &neww)
+        return *this;
+    ForwardList tmp(neww);
     Swap(tmp);
     return *this;
 }
@@ -113,16 +120,16 @@ void ForwardList::Remove(int32_t value) {
     Node* prev = head_;
     if (!prev) return;
 
-    Node* cur = head_->next_;
-    while (cur) {
-        if (cur->value_ == value) {
-            prev->next_ = cur->next_;
-            delete cur;
-            cur = prev->next_;
+    Node* runner = head_->next_;
+    while (runner) {
+        if (runner->value_ == value) {
+            prev->next_ = runner->next_;
+            delete runner;
+            runner = prev->next_;
             --size_;
         } else {
-            prev = cur;
-            cur = cur->next_;
+            prev = runner;
+            runner = runner->next_;
         }
     }
 }
